@@ -155,3 +155,6 @@ npm run test
 npm run test:coverage
 npm run cypress:open
 ```
+
+## Pokemon api 
+https://github.com/DEV2DEV-BR/pokemon-fake-api
