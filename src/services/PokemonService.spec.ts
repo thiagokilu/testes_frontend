@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 import { PokemonType } from "../types/PokemonType";
 import { fetchPokemonDetail, fetchPokemonList } from "./PokemonService";
-import { vi } from "vitest";
+import { vi, type Mock } from "vitest";
 
 global.fetch = vi.fn();
-const fetchMock = global.fetch as unknown as vi.Mock;
+const fetchMock = global.fetch as unknown as Mock;
 
 function createFetchResponse(data: any) {
   return { json: () => new Promise((resolve) => resolve(data)) } as Response;
