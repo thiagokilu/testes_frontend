@@ -1,10 +1,29 @@
-# Como configurar o ambiente React para testes
+# 🧪 Testes Frontend com React, Vitest e Cypress
 
-1. `npm install @testing-library/jest-dom @testing-library/react @testing-library/user-event  @vitest/coverage-v8 jsdom vitest path @types/testing-library__jest-dom -D`
+Este guia explica como configurar um ambiente de **testes unitários, de integração e E2E** em um projeto **React + Vite** utilizando **Vitest**, **Testing Library** e **Cypress**.
 
-2. Criar o arquivo **vitest.config.ts** na raiz do projeto:
+---
 
-```typescript
+## 📦 Instalação das dependências (Vitest)
+
+```bash
+npm install @testing-library/jest-dom \
+@testing-library/react \
+@testing-library/user-event \
+@vitest/coverage-v8 \
+jsdom \
+vitest \
+path \
+@types/testing-library__jest-dom -D
+```
+
+---
+
+## ⚙️ Configuração do Vitest
+
+### Criar o arquivo `vitest.config.ts` na raiz do projeto
+
+```ts
 /// <reference types="vitest"/>
 
 import { defineConfig } from "vite";
@@ -24,31 +43,43 @@ export default defineConfig({
 });
 ```
 
-3. Criar o arquivo **vitest-env.d.ts** dentro da pasta src:
+---
 
-```typescript
-/// <reference types="vitest/globals"/>
+### Criar o arquivo `vitest-env.d.ts` dentro da pasta `src`
+
+```ts
+/// <reference types="vitest/globals" />
 ```
 
-4. Criar o arquivo **setupTests.ts** dentro da pasta src
+---
 
-```typescript
+### Criar o arquivo `setupTests.ts` dentro da pasta `src`
+
+```ts
 import "@testing-library/jest-dom";
 ```
 
-5. Agora é preciso criar os scripts dentro do package.json
+---
 
-```jsonld=
- "test": "vitest",
- "coverage": "vitest run --coverage"
+## 📜 Scripts no `package.json`
+
+```json
+{
+  "scripts": {
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "cypress:open": "cypress open"
+  }
+}
 ```
 
-6. Exemplo de um teste de frontend:
+---
 
-```typescript
-// component
-import "./App.css";
+## 🧩 Exemplo de teste unitário
 
+### Componente
+
+```ts
 function App() {
   return (
     <div>
@@ -59,29 +90,68 @@ function App() {
 }
 
 export default App;
+```
 
-// testes
+### Teste
 
+```ts
 import { render, screen } from "@testing-library/react";
 import App from "./App";
-describe("Testa o component App", () => {
-  test("Devem haver dois títulos na página", async () => {
-    render(<App />);
 
+describe("Testa o componente App", () => {
+  test("Devem existir dois títulos na página", async () => {
+    render(<App />);
     const titles = await screen.findAllByRole("heading");
-
     expect(titles).toHaveLength(2);
-  });
-
-  test("Deve haver um título escrito 'Hello World'", async () => {
-    render(<App />);
-
-    const title = await screen.findByRole("heading", {
-      name: "Hello World",
-    });
-
-    expect(title).toBeInTheDocument();
   });
 });
 ```
-# testes_frontend
+
+---
+
+# 🚀 Testes E2E com Cypress
+
+## Instalação
+
+```bash
+npm install cypress -D
+```
+
+## Inicialização
+
+```bash
+npx cypress open
+```
+
+## Configuração `cypress.config.ts`
+
+```ts
+import { defineConfig } from "cypress";
+
+export default defineConfig({
+  e2e: {
+    baseUrl: "http://localhost:5173",
+  },
+});
+```
+
+## Exemplo de teste E2E
+
+```ts
+describe("Página inicial", () => {
+  it("Deve exibir os títulos", () => {
+    cy.visit("/");
+    cy.contains("Hello World").should("be.visible");
+  });
+});
+```
+
+---
+
+## ▶️ Executando os testes
+
+```bash
+npm run test
+npm run test:coverage
+npm run cypress:open
+```
